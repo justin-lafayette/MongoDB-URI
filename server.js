@@ -19,14 +19,9 @@ app.set("view engine", "handlebars");
 
 app.use(express.static("public"));
 
-mongoose.connect('mongodb://localhost:3000/MongoDB-URI', {useNewUrlParser: true});
+mongoose.connect('mongodb://localhost/scraperDB', { useUnifiedTopology: true, useNewUrlParser: true });
 
-app.get("/", function(req, res) {
-
-    res.render()
-});
-
-const routes = require("./controllers/burgers_controller.js");
+const routes = require("./controllers/controller.js");
 
 app.use(routes);
 
