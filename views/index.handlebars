@@ -1,9 +1,9 @@
-<h3>Headline</h3>
-
+index page
 <br>
+<button class="btn btn-info" id="scrape">Scrape new articles</button>
+<button class="btn btn-success" id="article">Show new articles</button>
 
-<p>Summary</p>
-
-<br>
-
-<p>URL</p>
+{{#each dbArticle}}
+    <div>{{this.title}}</div>
+    <a href="{{this.url}}">Link</a>
+{{/each}}

@@ -6,13 +6,24 @@ const cheerio = require("cheerio");
 
 const router = express.Router();
 const db = require("../models");
+const Article = require("../models/Article")
 
-router.get("/", function(req, res) {
+// router.get("/", function(req, res) {
 
-    console.log("\n Render Index");
+//     console.log("\n Render Index");
 
-    res.render("index");
-});
+//     res.render("index");
+// });
+router.get("/", /* async  */ function(req, res){
+    db.Article.find({})
+    .then(function(dbArticle){
+        res.render("index", {dbArticle})
+    })
+    .catch(function(err){
+        console.log(err);
+    })
+    // const articles = await Article.find({});
+})
 
 router.get("/scrape", function(req, res) {
 
@@ -40,6 +51,10 @@ router.get("/scrape", function(req, res) {
                     .children("a")
                     .attr("href");
 
+                // result.summary = $(this)
+                //     .children("p")
+                //     .text()
+
                 db.Article.create( result )
                     .then( function( dbArticle ) {
 
@@ -54,30 +69,25 @@ router.get("/scrape", function(req, res) {
                     })
             })
 
-            // $("Summary").each(function(i, element) {
-
-            //     let result = {};
-
-            //     result.Summary = $(this)
-            //         .children("a")
-            //         .text();
-
-            //     db.Summary.create ( result )
-            //         .then( function( dbSummary ) {
-
-            //             console.log(dbSummary);
-
-            //         })
-
-            //         .catch( function( err ) {
-
-            //             console.log( err )
-            //         })
-            // })
-
             console.log("\n Scrape finished");
         })
 
+});
+
+router.get("/articles", function(req, res) {
+    
+    db.Article.find({})
+        .then(function( dbArticle ) {
+            
+            console.log( dbArticle )
+            res.render("index", {dbArticle});
+
+        })
+        .catch(function( err ) {
+
+            res.json( err );
+            console.log( err );
+        })
 })
 
 module.exports = router;
