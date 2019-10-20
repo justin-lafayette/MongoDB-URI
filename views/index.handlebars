@@ -1,9 +1,86 @@
-index page
-<br>
-<button class="btn btn-info" id="scrape">Scrape new articles</button>
-<button class="btn btn-success" id="article">Show new articles</button>
+<nav class="navbar navbar-light alert-primary row">
 
-{{#each dbArticle}}
-    <div>{{this.title}}</div>
-    <a href="{{this.url}}">Link</a>
-{{/each}}
+    <div class="row w-100 text-center">
+
+        <div class="navbar-brand col-sm">Site Scraper</div>
+
+    </div>
+
+    <div class="row w-100 text-center">
+
+        <div class="col-sm-6">
+
+            <button class="btn btn-info w-50" id="scrape">Scrape new articles</button>
+
+        </div>
+        <div class="col-sm-6">
+
+            <button class="btn btn-success w-50" id="article">Show new articles</button>
+
+        </div>
+
+    </div>
+
+</nav>
+
+<div class="container col-8">
+
+    <div class="row">
+        <div class="col-sm-6">
+            {{#each dbArticle}}
+                <div class="articleTitle my-sm-3 border rounded-pill px-5 alert-dark" id="{{this._id}}">
+
+                    <div class="row">
+
+                        <div class="h5 py-3" >{{this.title}}</div>
+
+                    </div>
+
+                    <div class="row mb-4">
+
+                        <a class="btn btn-primary" href="{{this.url}}">Go to Article</a>
+
+                    </div>
+
+                </div>
+            {{/each}}
+
+        </div>
+
+        <div class="col-sm-6 container" id="notes">
+
+            {{!-- Does not function. Unable to get to render when data is sent from the server. Log does recognize the data. --}}
+
+            {{!-- {{#each note}}
+            {{log "this" this}}
+
+                <div class="notes">
+
+                    <div class="row">
+
+
+                        <input class="col-sm" type="text" id="noteTitle" name="title" placeholder="{{this.title}}">
+
+                    </div>
+
+                    <div class="row">
+
+                        <textarea class="col-sm" id="notesBody">{{this.body}}</textarea>
+
+                    </div>
+
+                    <div class="row">
+
+                        <button class="" id="updateNotes">Update</button>
+
+                    </div>
+                        {{log "title" this.title}}
+                
+                </div>
+
+            {{/each}} --}}
+        </div>
+
+    </div>
+
+</div>

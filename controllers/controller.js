@@ -6,21 +6,16 @@ const cheerio = require("cheerio");
 
 const router = express.Router();
 const db = require("../models");
-const Article = require("../models/Article")
+const Article = require("../models/Article");
+const Note = require("../models/Note");
 
-// router.get("/", function(req, res) {
-
-//     console.log("\n Render Index");
-
-//     res.render("index");
-// });
 router.get("/", /* async  */ function(req, res){
     db.Article.find({})
     .then(function(dbArticle){
         res.render("index", {dbArticle})
     })
-    .catch(function(err){
-        console.log(err);
+    .catch(function( err ){
+        console.log( err );
     })
     // const articles = await Article.find({});
 })
@@ -58,36 +53,63 @@ router.get("/scrape", function(req, res) {
                 db.Article.create( result )
                     .then( function( dbArticle ) {
 
-                        console.log(dbArticle);
+                        console.log( dbArticle );
+
+                        console.log("\n Scrape finished");
 
                     })
                     
                     .catch( function( err ) {
 
-                        console.log(err);
+                        console.log( err );
 
                     })
             })
-
-            console.log("\n Scrape finished");
+            
         })
-
 });
 
-router.get("/articles", function(req, res) {
-    
-    db.Article.find({})
-        .then(function( dbArticle ) {
-            
-            console.log( dbArticle )
-            res.render("index", {dbArticle});
+router.get("/articles/:id", function(req, res) {
+
+    console.log("\n Article get notes by id: ", req.params.id)
+
+    db.Article.find({ _id: req.params.id })
+        .populate("note")
+
+        .then(function( dbNote ) {
+            const note = dbNote[0].note
+            console.log( note );
+            res.json(note)
 
         })
         .catch(function( err ) {
 
             res.json( err );
-            console.log( err );
+
+        });
+
+});
+
+router.post("/articles/:id", function(req, res) {
+
+    console.log("\n New note post.body: ", req.body);
+
+    db.Note.create(req.body)
+        .then( function( dbNote ) {
+
+            return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
+
         })
-})
+        .then (function( dbArticle ) {
+
+            res.json( dbArticle );
+
+        })
+        .catch(function( err ) {
+
+            res.json( err );
+
+        });
+});
 
 module.exports = router;
